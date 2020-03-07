@@ -3,7 +3,7 @@ import Video from "../models/Video";
 
 export const home = async (req, res) => {
   try{
-    const videos = await Video.find({});
+    const videos = await Video.find({}).sort({_id: -1}); //-1은 위아래 순서를 바꾸고자 함
     res.render("home", { pageTitle: "Home", videos });
   } catch(error){
     console.log(error);
@@ -11,10 +11,18 @@ export const home = async (req, res) => {
   }
 };
 
-export const search = (req, res) => {
+export const search = async (req, res) => {
     const {
       query: { term: searchingBy }
     } = req;
+    let videos = [];
+    try{
+      videos = await Video.find({
+        title: {$regex: searchingBy, $options: "i"} //정규표현식, 옵션 i는 대소문자 구분 안한다는 것
+      });
+    } catch(error){
+      console.log(error);
+    }
     res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
   
