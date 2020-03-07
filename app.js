@@ -14,6 +14,7 @@ const app = express();
 app.use(helmet());
 app.set("view engine", "pug");
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static")); //static으로 가려고 하면 static 폴더를 보게 함
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); //html form
