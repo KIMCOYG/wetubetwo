@@ -30,13 +30,41 @@ export const postJoin = async (req, res, next) => {
 
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Log In" });
+
 export const postLogin = passport.authenticate('local', { //local은 설치해준 strategy 이름, authenticate는 eamil과 passport를 찾아보도록 설정되어있음
   failureRedirect: routes.login,
   successRedirect: routes.home
 });
 
+export const githubLogin = passport.authenticate("github")
+
+export const githubLoginCallback = async (accessToken, refreshToken, profile, cb) => { //깃헙에서 돌아오는 과정
+  const { _json: { id, avatar_url, name, email} } = profile;
+  try{
+    const user = await User.findOne({email});
+    if(user){ //사용자가 겹칠 경우
+      user.githubId = id;
+      user.save();
+      return cb(null, user); //쿠키에 저장
+    }
+    const newUser = await User.create({
+      email,
+      name,
+      githubId: id,
+      avatarUrl: avatar_url
+    });
+      return cb(null, newUser);
+  } catch(error){
+    return cb(error);
+  }
+};
+
+export const postGithubLogin = (req, res) => {
+  res.redirect(routes.home);
+}
+
 export const logout = (req, res) => {
-  // To Do: Process Log Out
+  req.logout();
   res.redirect(routes.home);
 };
 
