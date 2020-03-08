@@ -6,7 +6,7 @@ const multerVideo = multer({dest: "uploads/videos/"}); //폴더 생성
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "WeTube";
   res.locals.routes = routes;
-  res.locals.user = req.user || null; //passport가 req.user 생성
+  res.locals.loggedUser = req.user || null; //passport가 req.user 생성
   next();
 };
 

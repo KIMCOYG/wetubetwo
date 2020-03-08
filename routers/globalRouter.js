@@ -1,7 +1,7 @@
 import express from "express";
 import routes from "../routes";
 import { home, search } from "../controller/videoController";
-import { logout, getJoin, postJoin, getLogin, postLogin, githubLogin, postGithubLogin } from "../controller/userController";
+import { logout, getJoin, postJoin, getLogin, postLogin, githubLogin, postGithubLogin, getMe } from "../controller/userController";
 import { onlyPublic, onlyPrivate } from "../middlewares";
 import passport from "passport";
 
@@ -24,5 +24,7 @@ globalRouter.get(
     passport.authenticate("github", {failureRedirect: routes.login}),
     postGithubLogin  
 );
+
+globalRouter.get(routes.me, getMe);
 
 export default globalRouter;

@@ -39,19 +39,22 @@ export const postLogin = passport.authenticate('local', { //local은 설치해�
 export const githubLogin = passport.authenticate("github")
 
 export const githubLoginCallback = async (accessToken, refreshToken, profile, cb) => { //깃헙에서 돌아오는 과정
-  const { _json: { id, avatar_url, name, email} } = profile;
+  // console.log(accessToken, refreshToken, profile, cb);
+  const { _json: { id, avatar_url: avatarUrl, name, email} } = profile;
+  console.log(profile._json);
   try{
     const user = await User.findOne({email});
     if(user){ //사용자가 겹칠 경우
       user.githubId = id;
+      user.avatarUrl = avatarUrl;
       user.save();
       return cb(null, user); //쿠키에 저장
     }
-    const newUser = await User.create({
+    const newUser = await User.create({ //create는 생성 및 저장
       email,
       name,
       githubId: id,
-      avatarUrl: avatar_url
+      avatarUrl
     });
       return cb(null, newUser);
   } catch(error){
@@ -68,8 +71,23 @@ export const logout = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const userDetail = (req, res) =>
-  res.render("userDetail", { pageTitle: "User Detail" });
+export const getMe = (req, res) => {
+  console.log(req.user);
+  res.render("userDetail", { pageTitle: "User Detail", user: req.user});
+}
+
+export const userDetail = async (req, res) => {
+  const {
+    params: {id}
+  } = req;
+  try{
+    const user = await User.findById(id);
+    res.render("userDetail", { pageTitle: "User Detail", user });
+  } catch(error){
+    res.redirect(routes.home);
+  }
+}
+  
 export const editProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "Edit Profile" });
 export const changePassword = (req, res) =>
