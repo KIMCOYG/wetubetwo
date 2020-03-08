@@ -72,7 +72,7 @@ export const logout = (req, res) => {
 };
 
 export const getMe = (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
   res.render("userDetail", { pageTitle: "User Detail", user: req.user});
 }
 
@@ -90,5 +90,23 @@ export const userDetail = async (req, res) => {
   
 export const getEditProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "Edit Profile" });
+ 
+export const postEditProfile = async (req, res) => {
+  console.log(req.file);
+  const {
+    body: {name, email},
+    file
+  } = req;
+  try{
+    await User.findByIdAndUpdate(req.user.id, {
+      name,
+      email,
+      avatarUrl: file ? file.path : req.user.avatarUrl //유저가 파일을 추가하지 않으면 req.user.avatarUrl
+    });
+    res.redirect(routes.me);
+  } catch(error){
+    res.render("editProfile", { pageTitle: "Edit Profile" });
+  }
+}
 export const changePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "Change Password" });
