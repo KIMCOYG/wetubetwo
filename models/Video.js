@@ -21,9 +21,13 @@ const VideoSchema = new mongoose.Schema({
     comments: [
         {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment"
+        ref: "Comment" //다른 디비 가져오기
         }
-    ]
+    ],
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User" //다른 디비 가져오기
+    }
 });
 
 const model = mongoose.model("Video", VideoSchema);

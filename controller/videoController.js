@@ -37,10 +37,11 @@ export const getUpload = (req, res) =>
     const newVideo = await Video.create({ //디비에 들어갈 때마다 자동적으로 id가 생성
       fileUrl: path,
       title,
-      description
+      description,
+      creator: req.user.id
     });
-    console.log(newVideo);
-    // To Do: Upload and save video
+    req.user.videos.push(newVideo.id); //몽고디비 안 해당 유저에게 비디오 id 푸시
+    req.user.save();
     res.redirect(routes.videoDetail(newVideo.id));
 };
 
@@ -50,7 +51,8 @@ export const videoDetail = async (req, res) => {
   } = req;
 
   try {
-    const video = await Video.findById(id);
+    const video = await Video.findById(id).populate("creator"); //populate 객채를 불러오는 함수 오직 objectID 타입에만 사용 가능
+    console.log(video);
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch(error){
     console.log(error);
