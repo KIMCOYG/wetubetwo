@@ -7,7 +7,7 @@ const multerAvatar = multer({dest: "uploads/avatars/"}); //아마존에서 해�
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "WeTube";
   res.locals.routes = routes;
-  res.locals.loggedUser = req.user || null; //passport가 req.user 생성
+  res.locals.loggedUser = req.user || null; //passport가 req.user 생성, {}로 사용하면 로그아웃 상황에서도 비디오, 유저 디테일에 접속 가능 loggedUser &&
   next();
 };
 
