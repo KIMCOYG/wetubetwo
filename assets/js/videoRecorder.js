@@ -46,9 +46,11 @@ const handleVideoData = event => {
       recordBtn.removeEventListener("click", getVideo);
     }
   };
+
   function init() {
     recordBtn.addEventListener("click", getVideo);
   }
+  
   if (recorderContainer) {
     init();
   }
