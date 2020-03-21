@@ -14,7 +14,7 @@ const handleVideoData = event => {
     link.click();
   };
   
-  const stopRecording = () => {
+ const stopRecording = () => {
     videoRecorder.stop();
     recordBtn.removeEventListener("click", stopRecording);
     recordBtn.addEventListener("click", getVideo);
@@ -50,7 +50,7 @@ const handleVideoData = event => {
   function init() {
     recordBtn.addEventListener("click", getVideo);
   }
-  
+
   if (recorderContainer) {
     init();
   }
