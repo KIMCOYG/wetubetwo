@@ -102,7 +102,7 @@ export const postEditProfile = async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, {
       name,
       email,
-      avatarUrl: file ? file.path : req.user.avatarUrl //유저가 파일을 추가하지 않으면 req.user.avatarUrl
+      avatarUrl: file ? file.location : req.user.avatarUrl //유저가 파일을 추가하지 않으면 req.user.avatarUrl
     });
     res.redirect(routes.me);
   } catch(error){

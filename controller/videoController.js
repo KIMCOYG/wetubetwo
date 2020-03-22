@@ -33,10 +33,10 @@ export const getUpload = (req, res) =>
   export const postUpload = async (req, res) => {
     const {
       body: {title, description},
-      file: {path} //file의 path 부분을 사용
+      file: {location} //file의 path 부분을 사용, multer가 우리의 서버를 저장할 때는 path를 사용하지만 외부 서버에 저장할 때는 location을 사용
     } = req;
     const newVideo = await Video.create({ //디비에 들어갈 때마다 자동적으로 id가 생성
-      fileUrl: path,
+      fileUrl: location,
       title,
       description,
       creator: req.user.id
